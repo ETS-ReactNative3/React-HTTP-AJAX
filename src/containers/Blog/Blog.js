@@ -20,7 +20,7 @@ class Blog extends Component {
   // you cannot store the get request in a variable, since it is asynchronous
   // promises are the best way to handle that - default JS ES6
   componentDidMount() {
-    axios.get("https://jsonplaceholder.typicode.com/postssss")
+    axios.get("posts")
       .then(response =>{
         // fetch all but store only 4
         const posts = response.data.slice(0, 4);

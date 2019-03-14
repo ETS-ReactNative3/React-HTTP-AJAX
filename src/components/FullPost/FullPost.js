@@ -17,7 +17,7 @@ class FullPost extends Component {
       // stop by checking it the id is different for the post || post is loaded but id is different
       if (!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)){
       //make a http request for single post to load the data inside Full post
-        axios.get("https://jsonplaceholder.typicode.com/posts/" + this.props.id)
+        axios.get("posts/" + this.props.id)
         // you cannot store asynchronous response inside a variable,
         // use promises i.e then block
           .then(response => {
@@ -28,7 +28,7 @@ class FullPost extends Component {
   }
 
     deletePostHandler = () => {
-      axios.delete("https://jsonplaceholder.typicode.com/posts/" + this.props.id)
+      axios.delete("posts/" + this.props.id)
         .then(response => {
           console.log(response);
         })
