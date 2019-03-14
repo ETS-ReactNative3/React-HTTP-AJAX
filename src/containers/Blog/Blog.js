@@ -11,7 +11,8 @@ class Blog extends Component {
 
   state = {
     posts: [],
-    selectedPostId: null
+    selectedPostId: null,
+    error: false
   };
 
   // fetching http data has side effects
@@ -19,7 +20,7 @@ class Blog extends Component {
   // you cannot store the get request in a variable, since it is asynchronous
   // promises are the best way to handle that - default JS ES6
   componentDidMount() {
-    axios.get("https://jsonplaceholder.typicode.com/posts")
+    axios.get("https://jsonplaceholder.typicode.com/postssss")
       .then(response =>{
         // fetch all but store only 4
         const posts = response.data.slice(0, 4);
@@ -32,7 +33,9 @@ class Blog extends Component {
           }
         });
         this.setState({posts: updatedPosts});
-        console.log(posts);
+      })
+      .catch(error => {
+        this.setState({error: true})
       });
 
   };
@@ -44,28 +47,31 @@ class Blog extends Component {
 
 
     render () {
-    // Array of jsx elements and map each post
-      const posts = this.state.posts.map(post => {
-        return <Post
-          key={post.id}
-          title={post.title}
-          author={post.author}
-          clicked={() => this.postSelectedHandler(post.id)}/>
-      });
+      let posts = <p style={{textAlign: 'center'}}>Something went wrong..!</p>;
+      if (!this.state.error) {
+        // Array of jsx elements and map each post
+         posts = this.state.posts.map(post => {
+          return <Post
+            key={post.id}
+            title={post.title}
+            author={post.author}
+            clicked={() => this.postSelectedHandler(post.id)}/>
+        });
+      }
 
-        return (
-            <div>
-                <section className="Posts">
-                  {posts}
-                </section>
-                <section>
-                    <FullPost id={this.state.selectedPostId}/>
-                </section>
-                <section>
-                    <NewPost />
-                </section>
-            </div>
-        );
+      return (
+          <div>
+              <section className="Posts">
+                {posts}
+              </section>
+              <section>
+                  <FullPost id={this.state.selectedPostId}/>
+              </section>
+              <section>
+                  <NewPost />
+              </section>
+          </div>
+      );
     }
 }
 

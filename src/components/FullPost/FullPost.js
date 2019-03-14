@@ -6,7 +6,7 @@ import './FullPost.css';
 
 class FullPost extends Component {
   state = {
-    loadedPost: null
+    loadedPost: null,
   };
 
 
@@ -22,31 +22,38 @@ class FullPost extends Component {
         // use promises i.e then block
           .then(response => {
             this.setState({loadedPost: response.data})
-          })
-       }
+        })
       }
     }
+  }
+
+    deletePostHandler = () => {
+      axios.delete("https://jsonplaceholder.typicode.com/posts/" + this.props.id)
+        .then(response => {
+          console.log(response);
+        })
+    };
 
 
   render () {
-        let post = <p style={{textAlign: 'center'}}>Please select a Post!</p>;
-        if (this.props.id) {
-          post = <p style={{textAlign: 'center'}}>Loading....please wait!</p>
-        }
-          // after you get the id you immediately load title and body
-          // remember its an asynchronous request, takes time to loadPost...
-          // check if its valid loadedPost
-          if (this.state.loadedPost) {
-            post = (
-              <div className="FullPost">
-                <h1>{this.state.loadedPost.title}</h1>
-                <p>{this.state.loadedPost.body}</p>
-                <div className="Edit">
-                  <button className="Delete">Delete</button>
-                </div>
-              </div>
-          )};
-        return post;
+    let post = <p style={{textAlign: 'center'}}>Please select a Post!</p>;
+    if (this.props.id) {
+      post = <p style={{textAlign: 'center'}}>Loading....please wait!</p>
+    }
+      // after you get the id you immediately load title and body
+      // remember its an asynchronous request, takes time to loadPost...
+      // check if its valid loadedPost
+      if (this.state.loadedPost) {
+        post = (
+          <div className="FullPost">
+            <h1>{this.state.loadedPost.title}</h1>
+            <p>{this.state.loadedPost.body}</p>
+            <div className="Edit">
+              <button onClick={this.deletePostHandler}>Delete</button>
+            </div>
+          </div>
+      )};
+    return post;
     }
 }
 
