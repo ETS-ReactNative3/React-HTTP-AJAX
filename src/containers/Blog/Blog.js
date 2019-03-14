@@ -10,7 +10,8 @@ import axios from 'axios';
 class Blog extends Component {
 
   state = {
-    posts: []
+    posts: [],
+    selectedPostId: null
   };
 
   // fetching http data has side effects
@@ -20,14 +21,36 @@ class Blog extends Component {
   componentDidMount() {
     axios.get("https://jsonplaceholder.typicode.com/posts")
       .then(response =>{
-        this.setState({posts: response.data});
-      })
+        // fetch all but store only 4
+        const posts = response.data.slice(0, 4);
+        const updatedPosts = posts.map(post => {
+          return {
+            // distribute the property of post
+            // add a new property called author
+            ...post,
+            author: 'Nik'
+          }
+        });
+        this.setState({posts: updatedPosts});
+        console.log(posts);
+      });
 
+  };
+
+  postSelectedHandler(id){
+    this.setState({selectedPostId: id});
   }
+
+
+
     render () {
     // Array of jsx elements and map each post
       const posts = this.state.posts.map(post => {
-        return <Post key={post.id} title={post.title} />
+        return <Post
+          key={post.id}
+          title={post.title}
+          author={post.author}
+          clicked={() => this.postSelectedHandler(post.id)}/>
       });
 
         return (
@@ -36,7 +59,7 @@ class Blog extends Component {
                   {posts}
                 </section>
                 <section>
-                    <FullPost />
+                    <FullPost id={this.state.selectedPostId}/>
                 </section>
                 <section>
                     <NewPost />
