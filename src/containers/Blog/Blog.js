@@ -5,14 +5,35 @@ import FullPost from '../../components/FullPost/FullPost';
 import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
 
+import axios from 'axios';
+
 class Blog extends Component {
+
+  state = {
+    posts: []
+  };
+
+  // fetching http data has side effects
+  // so use componentDidMount
+  // you cannot store the get request in a variable, since it is asynchronous
+  // promises are the best way to handle that - default JS ES6
+  componentDidMount() {
+    axios.get("https://jsonplaceholder.typicode.com/posts")
+      .then(response =>{
+        this.setState({posts: response.data});
+      })
+
+  }
     render () {
+    // Array of jsx elements and map each post
+      const posts = this.state.posts.map(post => {
+        return <Post key={post.id} title={post.title} />
+      });
+
         return (
             <div>
                 <section className="Posts">
-                    <Post />
-                    <Post />
-                    <Post />
+                  {posts}
                 </section>
                 <section>
                     <FullPost />
